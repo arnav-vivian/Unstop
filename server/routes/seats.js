@@ -4,13 +4,15 @@ const router = express.Router();
 const totalSeats = 80;
 let seats = Array(totalSeats).fill(null); // Initially all seats are available
 
-// GET /seats - Get all seats
-router.get('/', (req, res) => {
-    res.json(seats);
+// Helper function to get the number of available seats
+// Inside your /seats route
+app.get('/seats', (req, res) => {
+    const availableSeats = seats.filter(seat => seat === null).length;
+    res.json({ seats: seats, availableSeats: availableSeats });
 });
 
-// POST /seats/book - Book seats
-router.post('/book', (req, res) => {
+// Inside your /book route, update the response to include availableSeats
+app.post('/book', (req, res) => {
     const { numSeats } = req.body;
     let bookedSeats = [];
 
@@ -19,7 +21,8 @@ router.post('/book', (req, res) => {
     if (availableSeats < numSeats) {
         return res.status(200).json({
             message: `Only ${availableSeats} seats are available. Please try booking ${availableSeats} or fewer seats.`,
-            availableSeats: availableSeats
+            availableSeats: availableSeats,
+            seats: seats
         });
     }
 
@@ -38,6 +41,7 @@ router.post('/book', (req, res) => {
             return res.json({
                 message: 'Seats successfully booked',
                 bookedSeats: bookedSeats,
+                availableSeats: seats.filter(seat => seat === null).length,
                 seats: seats
             });
         }
@@ -54,8 +58,7 @@ router.post('/book', (req, res) => {
     res.json({
         message: 'Seats successfully booked',
         bookedSeats: bookedSeats,
+        availableSeats: seats.filter(seat => seat === null).length,
         seats: seats
     });
 });
-
-module.exports = router;
