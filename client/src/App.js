@@ -39,19 +39,12 @@ function App() {
   return (
     <div className="App">
       <h1>Train Seat Reservation</h1>
-      <div className="booking-form">
-        <input
-          type="number"
-          value={numSeats}
-          onChange={(e) => setNumSeats(e.target.value)}
-          placeholder="Enter number of seats"
-        />
-        <button onClick={handleBooking}>Book Seats</button>
-      </div>
-      {message && <p>{message}</p>}
+
       <SeatGrid seats={seats} />
     </div>
   );
 }
 
 export default App;
+
+
