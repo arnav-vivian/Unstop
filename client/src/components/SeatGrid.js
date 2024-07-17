@@ -72,6 +72,10 @@ const SeatGrid = () => {
     }, []);
 
     const handleBooking = () => {
+        if (numSeats < 1 || numSeats > 7) {
+            alert('You can book between 1 and 7 seats only.');
+            return;
+        }
         fetch('http://localhost:5000/book', {
             method: 'POST',
             headers: {
@@ -98,14 +102,13 @@ const SeatGrid = () => {
         <div>
             <div>
                 <label>
-                    Number of seats to book (Min 1 to max of 7 className be booked):
+                    Number of seats to book (Min 1 to max of 7 seats can  be booked):
                     <input
                         type="number"
                         value={numSeats}
-                        onChange={(e) => setNumSeats(Math.min(7, Math.max(1, Number(e.target.value))))}
-                        min="1"
-                        max="7"
+                        onChange={(e) => setNumSeats(e.target.value === '' ? '' : Math.abs(Number(e.target.value)))}
                     />
+
                 </label>
                 <button onClick={handleBooking}>Book Seats</button>
             </div>
@@ -134,3 +137,5 @@ const SeatGrid = () => {
 };
 
 export default SeatGrid;
+
+
